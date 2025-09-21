@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Setting App</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="node_modules/chart.js/dist/chart.umd.js"></script>
+        <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+        .control-panel-bg {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+
+<body style="background-color:#8fd7ff; font-size: 12px;">
+    <div class="d-flex justify-content-around">
+        <div class="card" style="width: 1040px;">
+            <div class="card-body">
+                <div class="d-flex flex-row justify-content-around">
+                    <div>
+                        <select class="form-select" id="serial_ports" style="font-size:12px; height:31px; width:120px; vertical-align: middle;" onchange="onChangeSelectOption()">
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm" id="setport" onClick="send_start(document.getElementById('serial_ports').value)">OPEN</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm" id="setport" onClick="send_stop()">STOP</button>
+                    </div>
+                    <div>
+                        <input class="btn btn-secondary btn-sm" type="button" id="sw_ver" value="sw : " disabled>
+                    </div>
+                    <div>
+                        <input class="btn btn-secondary btn-sm" type="button" id="hw_ver" value="hw : " disabled>
+                    </div>
+                    <div>
+                        <input class="form-control form-control-sm" sytle="font-size: 12px" type="file" id="formFile">
+                    </div>
+                    <div>
+                        <select class="form-select" id="fw_sel" style="font-size:12px; height:31px; width:120px; vertical-align: middle;" onchange="onChangeSelectFW()">
+                        </select>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary btn-sm" id="download" onClick="fw_download_func()">펌웨어다운로드</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="d-flex justify-content-around">
+        <div class="card" style="width: 1040px;">
+            <div class="card-body">
+                <div class="d-flex flex-row justify-content-around">
+                    <div class="item">
+                        <input class="btn btn-secondary btn-sm" type="button" id="tower_id" value="ID" disabled>
+                        <button type="button" class="btn btn-secondary btn-sm" id="fan1on" onClick="sendToControlSerial(this.id)">팬 ON</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="fan1off" onClick="sendToControlSerial(this.id)">팬 OFF</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="heater1on" onClick="sendToControlSerial(this.id)">히터 ON</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="heater1off" onClick="sendToControlSerial(this.id)">히터 OFF</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="emergency" disabled>비상버튼</button>
+                        <button type="button" class="btn btn-secondary btn-sm" id="WATER_LEVEL" disabled>수위센서</button>
+                        <input class="btn btn-secondary btn-sm" type="button" id="TEMP" value="온도" disabled>
+                        <input class="btn btn-secondary btn-sm" type="button" id="HUMI" value="습도" disabled>
+                        <button type="button" class="btn btn-secondary btn-sm" id="reset" onClick="sendToControlSerial(this.id)">보드리셋</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+
+    <div id="telemetry-display-placeholder"></div>
+    <div id="custom-buttons-placeholder"></div>
+    <div id="value-setter-placeholder"></div>
+
+
+    <div class="w-full mx-auto">
+        <!-- <h1 class="text-3xl font-bold text-center mb-4 text-cyan-400">디지털 오실로스코프</h1> -->
+        
+        <!-- Chart Canvas -->
+        <div class="bg-gray-800 p-4 rounded-lg shadow-2xl border border-gray-700 min-h-[400px]">
+            <canvas id="waveformChart"></canvas>
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Main Controls -->
+            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-3 text-white">동작 제어</h2>
+                <div class="flex space-x-3">
+                    <button id="startStopBtn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-md">시작</button>
+                    <button id="resetBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-md">리셋</button>
+                </div>
+            </div>
+
+            <!-- Y-Axis Scale Controls -->
+            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-3 text-white">Y축 스케일 (값)</h2>
+                <div class="flex items-center space-x-3">
+                    <button id="yScaleDown" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">-</button>
+                    <span id="yScaleValue" class="text-lg font-mono w-20 text-center">100</span>
+                    <button id="yScaleUp" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">+</button>
+                </div>
+            </div>
+
+            <!-- X-Axis Scale Controls -->
+            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
+                <h2 class="text-xl font-semibold mb-3 text-white">X축 스케일 (시간)</h2>
+                <div class="flex items-center space-x-3">
+                    <button id="xScaleDown" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">-</button>
+                    <span id="xScaleValue" class="text-lg font-mono w-20 text-center">10s</span>
+                    <button id="xScaleUp" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">+</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <div id="slot">
+    </div>
+
+    <div class="d-flex justify-content-around">
+        <div class="form-outline w-100 mb-3">
+            <textarea class="form-control" id="freeform" rows="5" sytle="input-height:500px"></textarea>
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary btn-sm" id="download" onClick="">로그 저장</button>
+        </div>
+    </div>
+</body>
+
+<script src="./serial.js"></script>
+<script src="./modbus_data_provider.js"></script>
+<!-- <script src="./oscilloscope_simulator.js"></script> -->
+<script src="./must.js"></script>
+<script>
+    function initValueSetter() {
+        const slider = document.getElementById('value-slider');
+        const input = document.getElementById('value-input');
+
+        if (slider && input) {
+            slider.addEventListener('input', (event) => {
+                input.value = event.target.value;
+            });
+
+            input.addEventListener('input', (event) => {
+                slider.value = event.target.value;
+            });
+        }
+    }
+
+    const loadModule = (url, placeholderId) => {
+        return fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById(placeholderId).innerHTML = data;
+            })
+            .catch(error => console.error(`Error loading ${url}:`, error));
+    };
+
+    Promise.all([
+        loadModule('./telemetry.html', 'telemetry-display-placeholder'),
+        loadModule('./custom_buttons.html', 'custom-buttons-placeholder'),
+        loadModule('./value_setter.html', 'value-setter-placeholder'),
+        // loadModule('./oscilloscope_simulator.html', 'custom-oscilloscope_simulator-placeholder'),
+    ]).then(() => {
+        // All modules loaded, now initialize their JS
+        initValueSetter();
+        initPwmControl();
+        // initOscilloscopeSimulator();
+    });
+
+    function initPwmControl() {
+        const pwmSlider = document.getElementById('pwm-slider');
+        const pwmValue = document.getElementById('pwm-value');
+        const sendPwmBtn = document.getElementById('send-pwm');
+
+        if (pwmSlider && pwmValue && sendPwmBtn) {
+            pwmSlider.addEventListener('input', (event) => {
+                pwmValue.textContent = parseFloat(event.target.value).toFixed(1);
+            });
+
+            sendPwmBtn.addEventListener('click', () => {
+                const value = parseFloat(pwmSlider.value) * 10;
+                console.log('Sending PWM value:', value);
+                sendPwmModbus(value);
+            });
+        }
+    }
+
+    window.addEventListener('modbusData', (event) => {
+        const {
+            forwardCurrent,
+            forwardVolt,
+            forwardWatt,
+            VI_PHASE_DIFFERENCE_A,
+            RF_2S_VOLTAGE,
+            VOLT_V12_,
+            VOLT_V12,
+            VOLT_V5,
+            VOLT_V5_,
+            CURR_VRF,
+            NTC_RF,
+            PWM,
+            Hz
+        } = event.detail;
+
+        const updateElement = (id, value, unit = '') => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value.toFixed(2) + unit;
+            }
+        };
+
+        updateElement('VI_PHASE_DIFFERENCE_A', VI_PHASE_DIFFERENCE_A);
+        updateElement('RF_2S_VOLTAGE', RF_2S_VOLTAGE);
+        updateElement('VOLT_V12_', VOLT_V12_, ' V');
+        updateElement('VOLT_V12', VOLT_V12, ' V');
+        updateElement('VOLT_V5', VOLT_V5, ' V');
+        updateElement('VOLT_V5_', VOLT_V5_, ' V');
+        updateElement('CURR_VRF', CURR_VRF, ' A');
+        updateElement('NTC_RF', NTC_RF, ' °C');
+
+        const pwmDisplay = document.getElementById('display-pwm');
+        const hzDisplay = document.getElementById('display-hz');
+
+        if (pwmDisplay) {
+            pwmDisplay.textContent = PWM;
+        }
+        if (hzDisplay) {
+            hzDisplay.textContent = Hz;
+        }
+    });
+
+</script>
+
+</html>

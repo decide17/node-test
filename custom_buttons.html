@@ -1,0 +1,50 @@
+<style>
+    .custom-btn-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        border: 1px solid #dee2e6;
+    }
+</style>
+
+<div class="d-flex justify-content-around mt-3">
+    <div class="card" style="width: 1040px;">
+        <div class="card-body">
+            <h5 class="card-title mb-3">추가 기능</h5>
+            <div class="custom-btn-container">
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay1Btn" onclick="toggleRelay(1)">RELAY 1</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay2Btn" onclick="toggleRelay(2)">RELAY 2</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay3Btn" onclick="toggleRelay(3)">RELAY 3</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay4Btn" onclick="toggleRelay(4)">RELAY 4</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay5Btn" onclick="toggleRelay(5)">HPA RELAY</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay6Btn" onclick="toggleRelay(6)">HPB RELAY</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay7Btn" onclick="toggleRelay(7)">RF LOAD</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="relay8Btn" onclick="toggleRelay(8)">RF COM</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="function3Btn" onclick="sendPwmOn()">PWM ON</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn" id="function4Btn" onclick="sendPwmOff()">PWM OFF</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn">기능 11</button>
+                <button type="button" class="btn btn-secondary custom-toggle-btn">기능 12</button>
+            </div>
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">PWM Control</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex align-items-center">
+                                <label for="pwm-slider" class="form-label me-3 mb-0">PWM (0-50)</label>
+                                <input type="range" class="form-range" min="0" max="50" step="0.1" value="25.0" id="pwm-slider">
+                                <span id="pwm-value" class="badge bg-primary rounded-pill ms-3" style="width: 50px;">25.0</span>
+                                <button id="send-pwm" class="btn btn-primary ms-4">전송</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

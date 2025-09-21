@@ -1,0 +1,73 @@
+{
+  "name": "aims-gui",
+  "version": "1.0.0",
+  "description": "set time & frequency to data logger",
+  "homepage": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "clean": "rm -rf ./dist && rm -rf ./node_modules",
+    "deploy:xos": "electron-builder --mac",
+    "deploy:win32": "electron-builder --win nsis:ia32",
+    "deploy:win64": "electron-builder --win nsis:x64",
+    "deploy:linux32": "electron-builder --linux --ia32",
+    "deploy:linux64": "electron-builder --linux --x64"
+  },
+  "build": {
+    "productName": "",
+    "appId": "",
+    "asar": true,
+    "mac": {
+      "target": [
+        "default"
+      ]
+    },
+    "dmg": {
+      "title": "AIMS GUI"
+    },
+    "linux": {
+      "maintainer": "",
+      "target": [
+        "AppImage",
+        "deb",
+        "zip",
+        "tar.gz"
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": false,
+      "createDesktopShortcut": true
+    },
+    "directories": {
+      "buildResources": "./resources/installer/",
+      "output": "./dist/",
+      "app": "."
+    }
+  },
+  "author": "AIMS",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^29.1.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.2",
+    "chart.js": "^4.5.0",
+    "modbus-serial": "^8.0.21-no-serial-port",
+    "particle-ymodem": "^1.0.0",
+    "serialport": "^10.5.0",
+    "ymodem": "fronders/ymodem"
+  }
+}
