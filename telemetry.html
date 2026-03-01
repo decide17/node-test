@@ -1,78 +1,342 @@
-<div class="container my-3">
-    <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-            <h5 class="mb-0">입력값</h5>
+<div class="container mx-auto my-3 px-4">
+    <!-- Line Cartridge Section -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-4">
+        <div class="p-4 border-b bg-gray-800 text-white flex justify-between items-center">
+            <h5 class="text-lg font-bold mb-0">Line</h5>
+            <button id="lc-scan-btn"
+                class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded text-sm">SCAN</button>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>VI_PHASE_DIFFERENCE_A</small>
-                        <span class="badge bg-info rounded-pill" id="VI_PHASE_DIFFERENCE_A">0.00</span>
+        <div class="p-4">
+            <!-- Settings Section -->
+            <!-- Settings Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+                <!-- Country Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Country</label>
+                    <div class="flex items-center mt-1">
+                        <select id="lc-country-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md">
+                            <option value="0">None</option>
+                            <option value="1">Korea</option>
+                            <option value="2">Brazil</option>
+                        </select>
+
+                        <span id="lc-country"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>RF_2S_VOLTAGE</small>
-                        <span class="badge bg-info rounded-pill" id="RF_2S_VOLTAGE">0.00</span>
+
+                <!-- MHz Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">MHz (0.000~10.000)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="lc-mhz-input" step="0.001" min="0" max="10"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="MHz">
+
+                        <span id="lc-mhz"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>VOLT_V12_</small>
-                        <span class="badge bg-success rounded-pill" id="VOLT_V12_">0.00 V</span>
+
+                <!-- Depth Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Depth</label>
+                    <div class="flex items-center mt-1">
+                        <select id="lc-depth-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md">
+                            <option value="0">None</option>
+                            <option value="1">1.5mm</option>
+                            <option value="2">3.0mm</option>
+                            <option value="3">4.5mm</option>
+                            <option value="4">7.0mm</option>
+                            <option value="5">10.0mm</option>
+                            <option value="6">13.0mm</option>
+                        </select>
+
+                        <span id="lc-depth"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
                     </div>
                 </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>VOLT_V12</small>
-                        <span class="badge bg-success rounded-pill" id="VOLT_V12">0.00 V</span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>VOLT_V5</small>
-                        <span class="badge bg-success rounded-pill" id="VOLT_V5">0.00 V</span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>VOLT_V5_</small>
-                        <span class="badge bg-success rounded-pill" id="VOLT_V5_">0.00 V</span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>CURR_VRF</small>
-                        <span class="badge bg-warning text-dark rounded-pill" id="CURR_VRF">0.00 A</span>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                    <div class="d-flex justify-content-between align-items-center border p-2 rounded">
-                        <small>NTC_RF</small>
-                        <span class="badge bg-danger rounded-pill" id="NTC_RF">0.00 °C</span>
+
+                <!-- Power Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Power (0~200)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="lc-power-input" min="0" max="200" step="1"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Power">
+
+                        <span id="lc-power"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
                     </div>
                 </div>
             </div>
-            <hr class="my-4">
-            <div>
-                <h5 class="card-title mb-3">수신된 값</h5>
-                <div class="row text-center">
-                    <div class="col">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-muted">PWM</h6>
-                                <p class="card-text fs-4 fw-bold" id="display-pwm">-</p>
-                            </div>
-                        </div>
+
+
+            <!-- Unified Set Button -->
+            <div class="mb-4 text-right">
+                <button id="lc-info-set-btn"
+                    class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Set Info</button>
+            </div>
+
+            <!-- Advanced Settings Section (Serial, Shots) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Serial Number (16 Bytes Hex)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="text" id="lc-serial-input" maxlength="32"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="32 Hex">
+                        <button id="lc-serial-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="lc-serial"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
                     </div>
-                    <div class="col">
-                        <div class="card bg-light">
-                            <div class="card-body">
-                                <h6 class="card-subtitle mb-2 text-muted">Frequency (Hz)</h6>
-                                <p class="card-text fs-4 fw-bold" id="display-hz">-</p>
-                            </div>
-                        </div>
+                </div>
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Total Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="lc-total-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="lc-total-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="lc-total-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Remaining Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="lc-rem-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="lc-rem-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="lc-rem-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pen Cartridge Section -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-4">
+        <div class="p-4 border-b bg-gray-800 text-white flex justify-between items-center">
+            <h5 class="text-lg font-bold mb-0">Pen</h5>
+            <button id="pc-scan-btn"
+                class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded text-sm">SCAN</button>
+        </div>
+        <div class="p-4">
+            <!-- Settings Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+                <!-- Country -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Country</label>
+                    <div class="flex items-center mt-1">
+                        <select id="pc-country-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md">
+                            <option value="0">None</option>
+                            <option value="1">Korea</option>
+                            <option value="2">Brazil</option>
+                        </select>
+
+                        <span id="pc-country"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+                <!-- MHz -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">MHz (0.000~10.000)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="pc-mhz-input" step="0.001" min="0" max="10"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="MHz">
+
+                        <span id="pc-mhz"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+                <!-- Depth -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Depth</label>
+                    <div class="flex items-center mt-1">
+                        <select id="pc-depth-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md">
+                            <option value="0">None</option>
+                            <option value="1">1.5mm</option>
+                            <option value="2">3.0mm</option>
+                            <option value="3">4.5mm</option>
+                            <option value="4">7.0mm</option>
+                            <option value="5">10.0mm</option>
+                            <option value="6">13.0mm</option>
+                        </select>
+
+                        <span id="pc-depth"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+                <!-- Power Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Power (0~200)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="pc-power-input" min="0" max="200" step="1"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Power">
+
+                        <span id="pc-power"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unified Set Button -->
+            <div class="mb-4 text-right">
+                <button id="pc-info-set-btn"
+                    class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Set Info</button>
+            </div>
+            <!-- Advanced Settings -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Serial -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Serial Number (8 Bytes Hex)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="text" id="pc-serial-input" maxlength="32"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="32 Hex">
+                        <button id="pc-serial-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="pc-serial"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+                <!-- Total Shot -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Total Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="pc-total-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="pc-total-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="pc-total-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+                <!-- Rem Shot -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Remaining Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="pc-rem-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="pc-rem-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="pc-rem-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RF TIP Section -->
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-4">
+        <div class="p-4 border-b bg-gray-800 text-white flex justify-between items-center">
+            <h5 class="text-lg font-bold mb-0">RF TIP</h5>
+            <button id="rt-scan-btn"
+                class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-1 px-3 rounded text-sm">SCAN</button>
+        </div>
+        <div class="p-4">
+            <!-- Settings Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-4">
+                <!-- Country -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Country</label>
+                    <div class="flex items-center mt-1">
+                        <select id="rt-country-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md">
+                            <option value="0">None</option>
+                            <option value="1">Korea</option>
+                            <option value="2">Brazil</option>
+                        </select>
+
+                        <span id="rt-country"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+                <!-- MHz -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">MHz (0.000~10.000)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="rt-mhz-input" step="0.001" min="0" max="10"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="MHz">
+
+                        <span id="rt-mhz"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+                <!-- Power Setting -->
+                <div class="border p-2 rounded">
+                    <label class="block text-sm font-medium text-gray-700">Power (0~200)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="rt-power-input" min="0" max="200" step="1"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Power">
+
+                        <span id="rt-power"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-blue-100 text-blue-800 border border-blue-200">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Unified Set Button -->
+            <div class="mb-4 text-right">
+                <button id="rt-info-set-btn"
+                    class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Set Info</button>
+            </div>
+            <!-- Advanced Settings -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <!-- Serial -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Serial Number (8 Bytes Hex)</label>
+                    <div class="flex items-center mt-1">
+                        <input type="text" id="rt-serial-input" maxlength="32"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="32 Hex">
+                        <button id="rt-serial-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="rt-serial"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+                <!-- Total Shot -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Total Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="rt-total-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="rt-total-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="rt-total-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
+                    </div>
+                </div>
+                <!-- Rem Shot -->
+                <div class="border p-2 rounded bg-gray-50">
+                    <label class="block text-sm font-medium text-gray-700">Remaining Shot</label>
+                    <div class="flex items-center mt-1">
+                        <input type="number" id="rt-rem-shot-input"
+                            class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 flex-1 block min-w-0 sm:text-sm border-gray-300 rounded-md"
+                            placeholder="Count">
+                        <button id="rt-rem-shot-set-btn"
+                            class="ml-2 bg-purple-500 hover:bg-purple-700 text-white font-bold py-1 px-3 rounded">Set</button>
+                        <span id="rt-rem-shot"
+                            class="ml-2 text-sm font-bold inline-block py-1 px-2 rounded bg-purple-100 text-purple-800 border border-purple-200">-</span>
                     </div>
                 </div>
             </div>

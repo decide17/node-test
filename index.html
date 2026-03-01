@@ -4,19 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Setting App</title>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+    <!-- Local Chart.js -->
     <script src="node_modules/chart.js/dist/chart.umd.js"></script>
-        <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Local Tailwind CSS -->
+    <script src="libs/tailwindcss.js"></script>
+    <!-- Local Chart.js Date-fns Adapter -->
+    <script src="libs/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <!-- Local Noto Sans KR Font -->
+    <link href="node_modules/@fontsource/noto-sans-kr/index.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
         }
+
         .control-panel-bg {
             background-color: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
@@ -25,40 +26,8 @@
 </head>
 
 <body style="background-color:#8fd7ff; font-size: 12px;">
-    <div class="d-flex justify-content-around">
-        <div class="card" style="width: 1040px;">
-            <div class="card-body">
-                <div class="d-flex flex-row justify-content-around">
-                    <div>
-                        <select class="form-select" id="serial_ports" style="font-size:12px; height:31px; width:120px; vertical-align: middle;" onchange="onChangeSelectOption()">
-                        </select>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-primary btn-sm" id="setport" onClick="send_start(document.getElementById('serial_ports').value)">OPEN</button>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-primary btn-sm" id="setport" onClick="send_stop()">STOP</button>
-                    </div>
-                    <div>
-                        <input class="btn btn-secondary btn-sm" type="button" id="sw_ver" value="sw : " disabled>
-                    </div>
-                    <div>
-                        <input class="btn btn-secondary btn-sm" type="button" id="hw_ver" value="hw : " disabled>
-                    </div>
-                    <div>
-                        <input class="form-control form-control-sm" sytle="font-size: 12px" type="file" id="formFile">
-                    </div>
-                    <div>
-                        <select class="form-select" id="fw_sel" style="font-size:12px; height:31px; width:120px; vertical-align: middle;" onchange="onChangeSelectFW()">
-                        </select>
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-primary btn-sm" id="download" onClick="fw_download_func()">펌웨어다운로드</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="serial-controls-placeholder"></div>
+    <div id="firmware-update-placeholder"></div>
 
     <!-- <div class="d-flex justify-content-around">
         <div class="card" style="width: 1040px;">
@@ -83,61 +52,29 @@
 
     <div id="telemetry-display-placeholder"></div>
     <div id="custom-buttons-placeholder"></div>
-    <div id="value-setter-placeholder"></div>
 
 
-    <div class="w-full mx-auto">
-        <!-- <h1 class="text-3xl font-bold text-center mb-4 text-cyan-400">디지털 오실로스코프</h1> -->
-        
-        <!-- Chart Canvas -->
-        <div class="bg-gray-800 p-4 rounded-lg shadow-2xl border border-gray-700 min-h-[400px]">
-            <canvas id="waveformChart"></canvas>
-        </div>
 
-        <!-- Controls -->
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Main Controls -->
-            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
-                <h2 class="text-xl font-semibold mb-3 text-white">동작 제어</h2>
-                <div class="flex space-x-3">
-                    <button id="startStopBtn" class="bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-md">시작</button>
-                    <button id="resetBtn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg transition-all duration-300 shadow-md">리셋</button>
-                </div>
-            </div>
+    <!-- Chart and Controls removed as per user request -->
 
-            <!-- Y-Axis Scale Controls -->
-            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
-                <h2 class="text-xl font-semibold mb-3 text-white">Y축 스케일 (값)</h2>
-                <div class="flex items-center space-x-3">
-                    <button id="yScaleDown" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">-</button>
-                    <span id="yScaleValue" class="text-lg font-mono w-20 text-center">100</span>
-                    <button id="yScaleUp" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">+</button>
-                </div>
-            </div>
 
-            <!-- X-Axis Scale Controls -->
-            <div class="control-panel-bg bg-gray-800 border border-gray-700 rounded-lg p-4 shadow-lg flex flex-col items-center">
-                <h2 class="text-xl font-semibold mb-3 text-white">X축 스케일 (시간)</h2>
-                <div class="flex items-center space-x-3">
-                    <button id="xScaleDown" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">-</button>
-                    <span id="xScaleValue" class="text-lg font-mono w-20 text-center">10s</span>
-                    <button id="xScaleUp" class="bg-gray-600 hover:bg-gray-700 text-white font-bold h-10 w-10 rounded-full transition-all duration-300 shadow-md">+</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
 
     <div id="slot">
     </div>
 
-    <div class="d-flex justify-content-around">
-        <div class="form-outline w-100 mb-3">
-            <textarea class="form-control" id="freeform" rows="5" sytle="input-height:500px"></textarea>
-        </div>
-        <div>
-            <button type="button" class="btn btn-primary btn-sm" id="download" onClick="">로그 저장</button>
+    <div class="container mx-auto my-3 px-4">
+        <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+            <div class="p-4 border-b bg-gray-800 text-white flex justify-between items-center">
+                <h5 class="text-lg font-bold">Logger</h5>
+                <button type="button"
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm"
+                    id="save-log-btn">로그 저장</button>
+            </div>
+            <div class="p-4">
+                <textarea
+                    class="block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    id="freeform" rows="5" style="height:250px"></textarea>
+            </div>
         </div>
     </div>
 </body>
@@ -145,21 +82,19 @@
 <script src="./serial.js"></script>
 <script src="./modbus_data_provider.js"></script>
 <!-- <script src="./oscilloscope_simulator.js"></script> -->
-<script src="./must.js"></script>
+<!-- <script src="./oscilloscope_simulator.js"></script> -->
 <script>
-    function initValueSetter() {
-        const slider = document.getElementById('value-slider');
-        const input = document.getElementById('value-input');
 
-        if (slider && input) {
-            slider.addEventListener('input', (event) => {
-                input.value = event.target.value;
-            });
 
-            input.addEventListener('input', (event) => {
-                slider.value = event.target.value;
-            });
-        }
+    function saveLog() {
+        const textToSave = document.getElementById('freeform').value;
+        const blob = new Blob([textToSave], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'log.txt';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     const loadModule = (url, placeholderId) => {
@@ -172,77 +107,585 @@
     };
 
     Promise.all([
+        loadModule('./serial_controls.html', 'serial-controls-placeholder'),
+        loadModule('./firmware_update.html', 'firmware-update-placeholder'),
         loadModule('./telemetry.html', 'telemetry-display-placeholder'),
-        loadModule('./custom_buttons.html', 'custom-buttons-placeholder'),
-        loadModule('./value_setter.html', 'value-setter-placeholder'),
+        // loadModule('./custom_buttons.html', 'custom-buttons-placeholder'),
+
         // loadModule('./oscilloscope_simulator.html', 'custom-oscilloscope_simulator-placeholder'),
     ]).then(() => {
         // All modules loaded, now initialize their JS
-        initValueSetter();
-        initPwmControl();
-        // initOscilloscopeSimulator();
+        setTimeout(() => {
+            listSerialPorts();
+            initPwmControl();
+            initTelemetryPwmControl(); // Empty placeholder
+            initChopperKhzControl();  // Empty placeholder
+            initLineCartridgeControl(); // Newly added
+            initPenCartridgeControl();
+            initRfTipControl();
+            initRfMhzControl();
+
+            initIrradiationTimeControl();
+            // initOscilloscopeSimulator();
+
+            const saveLogBtn = document.getElementById('save-log-btn');
+            if (saveLogBtn) {
+                saveLogBtn.addEventListener('click', saveLog);
+            }
+
+            const scanPortsBtn = document.getElementById('scan-ports-btn');
+            if (scanPortsBtn) {
+                scanPortsBtn.addEventListener('click', listSerialPorts);
+            }
+
+            // Bind SCAN buttons
+            const lcScanBtn = document.getElementById('lc-scan-btn');
+            if (lcScanBtn) {
+                lcScanBtn.addEventListener('click', () => {
+                    if (typeof scanLineCartridge === 'function') scanLineCartridge();
+                    else console.error('scanLineCartridge function not found');
+                });
+            }
+
+            const pcScanBtn = document.getElementById('pc-scan-btn');
+            if (pcScanBtn) {
+                pcScanBtn.addEventListener('click', () => {
+                    if (typeof scanPenCartridge === 'function') scanPenCartridge();
+                    else console.error('scanPenCartridge function not found');
+                });
+            }
+
+            const rtScanBtn = document.getElementById('rt-scan-btn');
+            if (rtScanBtn) {
+                rtScanBtn.addEventListener('click', () => {
+                    if (typeof scanRfTip === 'function') scanRfTip();
+                    else console.error('scanRfTip function not found');
+                });
+            }
+        }, 100); // 100ms delay
     });
 
     function initPwmControl() {
         const pwmSlider = document.getElementById('pwm-slider');
-        const pwmValue = document.getElementById('pwm-value');
+        const pwmValueInput = document.getElementById('pwm-value');
         const sendPwmBtn = document.getElementById('send-pwm');
 
-        if (pwmSlider && pwmValue && sendPwmBtn) {
+        if (pwmSlider && pwmValueInput && sendPwmBtn) {
             pwmSlider.addEventListener('input', (event) => {
-                pwmValue.textContent = parseFloat(event.target.value).toFixed(1);
+                pwmValueInput.value = parseFloat(event.target.value).toFixed(1);
+            });
+
+            pwmValueInput.addEventListener('input', (event) => {
+                let value = parseFloat(event.target.value);
+                const min = parseFloat(event.target.min);
+                const max = parseFloat(event.target.max);
+
+                if (isNaN(value)) {
+                    value = 50;
+                } else if (value < min) {
+                    value = min;
+                } else if (value > max) {
+                    value = max;
+                }
+                event.target.value = value;
+                pwmSlider.value = value;
             });
 
             sendPwmBtn.addEventListener('click', () => {
                 const value = parseFloat(pwmSlider.value) * 10;
                 console.log('Sending PWM value:', value);
-                sendPwmModbus(value);
+                sendPwmModbus(1, value);
             });
         }
     }
 
-    window.addEventListener('modbusData', (event) => {
-        const {
-            forwardCurrent,
-            forwardVolt,
-            forwardWatt,
-            VI_PHASE_DIFFERENCE_A,
-            RF_2S_VOLTAGE,
-            VOLT_V12_,
-            VOLT_V12,
-            VOLT_V5,
-            VOLT_V5_,
-            CURR_VRF,
-            NTC_RF,
-            PWM,
-            Hz
-        } = event.detail;
 
-        const updateElement = (id, value, unit = '') => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.textContent = value.toFixed(2) + unit;
+
+    function initLineCartridgeControl() {
+        console.log("Initializing Line Cartridge Controls...");
+
+        const sendCurrentLcSettings = () => {
+            const country = parseInt(document.getElementById('lc-country-input').value, 10) || 0;
+            const mhz = parseFloat(document.getElementById('lc-mhz-input').value) || 0;
+            const depth = parseInt(document.getElementById('lc-depth-input').value, 10) || 0;
+            const power = parseInt(document.getElementById('lc-power-input').value, 10) || 0;
+
+            console.log(`Sending LC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
+            if (typeof sendLineCartridgeInfo === 'function') {
+                sendLineCartridgeInfo(mhz, depth, country, power);
+            } else {
+                console.error("sendLineCartridgeInfo function not found");
             }
         };
 
-        updateElement('VI_PHASE_DIFFERENCE_A', VI_PHASE_DIFFERENCE_A);
-        updateElement('RF_2S_VOLTAGE', RF_2S_VOLTAGE);
-        updateElement('VOLT_V12_', VOLT_V12_, ' V');
-        updateElement('VOLT_V12', VOLT_V12, ' V');
-        updateElement('VOLT_V5', VOLT_V5, ' V');
-        updateElement('VOLT_V5_', VOLT_V5_, ' V');
-        updateElement('CURR_VRF', CURR_VRF, ' A');
-        updateElement('NTC_RF', NTC_RF, ' °C');
-
-        const pwmDisplay = document.getElementById('display-pwm');
-        const hzDisplay = document.getElementById('display-hz');
-
-        if (pwmDisplay) {
-            pwmDisplay.textContent = PWM;
+        // Unified Set Info Button
+        const infoSetBtn = document.getElementById('lc-info-set-btn');
+        if (infoSetBtn) {
+            infoSetBtn.onclick = sendCurrentLcSettings;
         }
-        if (hzDisplay) {
-            hzDisplay.textContent = Hz;
+
+        // Serial
+        // Serial
+        const serialBtn = document.getElementById('lc-serial-set-btn');
+        if (serialBtn) {
+            serialBtn.onclick = () => {
+                let value = document.getElementById('lc-serial-input').value.trim();
+                // Sanitize: remove non-hex, pad to 16 chars (8 bytes effective serial)
+                value = value.replace(/[^0-9A-Fa-f]/g, '');
+                if (value.length > 16) echo = value.substring(0, 16);
+                const sanitized = value.padStart(16, '0').substring(0, 16).toUpperCase();
+
+                document.getElementById('lc-serial-input').value = sanitized;
+                console.log('Sending Line Cartridge Serial:', sanitized);
+                sendLineCartridgeSerial(sanitized);
+            };
         }
+
+        // Total Shot
+        const totalShotBtn = document.getElementById('lc-total-shot-set-btn');
+        if (totalShotBtn) {
+            totalShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('lc-total-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending Line Cartridge Total Shot:', value);
+                    sendLineCartridgeTotalShot(value);
+                }
+            });
+        }
+
+        // Rem Shot
+        const remShotBtn = document.getElementById('lc-rem-shot-set-btn');
+        if (remShotBtn) {
+            remShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('lc-rem-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending Line Cartridge Rem Shot:', value);
+                    sendLineCartridgeRemShot(value);
+                }
+            });
+        }
+    }
+
+    function initPenCartridgeControl() {
+        console.log("Initializing Pen Cartridge Controls...");
+
+        const sendCurrentPcSettings = () => {
+            const country = parseInt(document.getElementById('pc-country-input').value, 10) || 0;
+            const mhz = parseFloat(document.getElementById('pc-mhz-input').value) || 0;
+            const depth = parseInt(document.getElementById('pc-depth-input').value, 10) || 0;
+            const power = parseInt(document.getElementById('pc-power-input').value, 10) || 0;
+
+            console.log(`Sending PC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
+            if (typeof sendPenCartridgeInfo === 'function') {
+                sendPenCartridgeInfo(mhz, depth, country, power);
+            } else {
+                console.log("sendPenCartridgeInfo function not implemented");
+            }
+        };
+
+        // Unified Set Info Button
+        const infoSetBtn = document.getElementById('pc-info-set-btn');
+        if (infoSetBtn) {
+            infoSetBtn.addEventListener('click', sendCurrentPcSettings);
+        }
+
+        // Serial
+        const serialBtn = document.getElementById('pc-serial-set-btn');
+        if (serialBtn) {
+            serialBtn.onclick = () => {
+                let value = document.getElementById('pc-serial-input').value.trim();
+                // Sanitize
+                value = value.replace(/[^0-9A-Fa-f]/g, '');
+                if (value.length > 16) value = value.substring(0, 16);
+                const sanitized = value.padStart(16, '0').substring(0, 16).toUpperCase();
+
+                document.getElementById('pc-serial-input').value = sanitized;
+                console.log('Sending Pen Cartridge Serial:', sanitized);
+                if (typeof sendPenCartridgeSerial === 'function') {
+                    sendPenCartridgeSerial(sanitized);
+                } else {
+                    console.log("sendPenCartridgeSerial function not implemented");
+                }
+            };
+        }
+
+        // Total Shot
+        const totalShotBtn = document.getElementById('pc-total-shot-set-btn');
+        if (totalShotBtn) {
+            totalShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('pc-total-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending Pen Cartridge Total Shot:', value);
+                    if (typeof sendPenCartridgeTotalShot === 'function') {
+                        sendPenCartridgeTotalShot(value);
+                    } else {
+                        console.log("sendPenCartridgeTotalShot not implemented");
+                    }
+                }
+            });
+        }
+
+        // Rem Shot
+        const remShotBtn = document.getElementById('pc-rem-shot-set-btn');
+        if (remShotBtn) {
+            remShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('pc-rem-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending Pen Cartridge Rem Shot:', value);
+                    if (typeof sendPenCartridgeRemShot === 'function') {
+                        sendPenCartridgeRemShot(value);
+                    } else {
+                        console.log("sendPenCartridgeRemShot not implemented");
+                    }
+                }
+            });
+        }
+    }
+
+    function initRfTipControl() {
+        console.log("Initializing RF Tip Controls...");
+
+        const sendCurrentRtSettings = () => {
+            const country = parseInt(document.getElementById('rt-country-input').value, 10) || 0;
+            const mhz = parseFloat(document.getElementById('rt-mhz-input').value) || 0;
+            const power = parseInt(document.getElementById('rt-power-input').value, 10) || 0;
+
+            console.log(`Sending RT Settings: MHz=${mhz}, Country=${country}, Power=${power}`);
+            if (typeof sendRfTipInfo === 'function') {
+                sendRfTipInfo(mhz, 0, country, power);
+            } else {
+                console.log("sendRfTipInfo function not implemented");
+            }
+        };
+
+        // Unified Set Info Button
+        const infoSetBtn = document.getElementById('rt-info-set-btn');
+        if (infoSetBtn) {
+            infoSetBtn.addEventListener('click', sendCurrentRtSettings);
+        }
+
+        // Serial
+        const serialBtn = document.getElementById('rt-serial-set-btn');
+        if (serialBtn) {
+            serialBtn.onclick = () => {
+                let value = document.getElementById('rt-serial-input').value.trim();
+                // Sanitize
+                value = value.replace(/[^0-9A-Fa-f]/g, '');
+                if (value.length > 16) value = value.substring(0, 16);
+                const sanitized = value.padStart(16, '0').substring(0, 16).toUpperCase();
+
+                document.getElementById('rt-serial-input').value = sanitized;
+                console.log('Sending RF Tip Serial:', sanitized);
+                if (typeof sendRfTipSerial === 'function') {
+                    sendRfTipSerial(sanitized);
+                } else {
+                    console.log("sendRfTipSerial function not implemented");
+                }
+            };
+        }
+
+        // Total Shot
+        const totalShotBtn = document.getElementById('rt-total-shot-set-btn');
+        if (totalShotBtn) {
+            totalShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('rt-total-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending RF Tip Total Shot:', value);
+                    if (typeof sendRfTipTotalShot === 'function') {
+                        sendRfTipTotalShot(value);
+                    } else {
+                        console.log("sendRfTipTotalShot not implemented");
+                    }
+                }
+            });
+        }
+
+        // Rem Shot
+        const remShotBtn = document.getElementById('rt-rem-shot-set-btn');
+        if (remShotBtn) {
+            remShotBtn.addEventListener('click', () => {
+                const value = parseInt(document.getElementById('rt-rem-shot-input').value, 10);
+                if (!isNaN(value)) {
+                    console.log('Sending RF Tip Rem Shot:', value);
+                    if (typeof sendRfTipRemShot === 'function') {
+                        sendRfTipRemShot(value);
+                    } else {
+                        console.log("sendRfTipRemShot not implemented");
+                    }
+                }
+            });
+        }
+    }
+
+    // Removed initTelemetryPwmControl as elements were removed
+    function initTelemetryPwmControl() { }
+
+    // Removed initChopperKhzControl as elements were removed
+    function initChopperKhzControl() { }
+
+
+    function initRfMhzControl() {
+        const sendBtn = document.getElementById('send-rf-mhz');
+        if (sendBtn) {
+            sendBtn.addEventListener('click', () => {
+                const selectedMhz = document.querySelector('input[name="rf-mhz-value"]:checked');
+                if (selectedMhz) {
+                    const value = parseFloat(selectedMhz.value);
+                    console.log('Sending RF MHz value:', value);
+                    sendRfMhz(value);
+                } else {
+                    console.log('No MHz value selected');
+                }
+            });
+        }
+    }
+
+    function initIrradiationTimeControl() {
+        const slider = document.getElementById('irradiation-time-slider');
+        const valueInput = document.getElementById('irradiation-time-value');
+        const sendBtn = document.getElementById('send-irradiation-time');
+
+        if (slider && valueInput && sendBtn) {
+            slider.addEventListener('input', (event) => {
+                valueInput.value = event.target.value;
+            });
+
+            valueInput.addEventListener('input', (event) => {
+                let value = parseInt(event.target.value, 10);
+                const min = parseInt(event.target.min, 10);
+                const max = parseInt(event.target.max, 10);
+
+                if (isNaN(value)) {
+                    value = 50;
+                } else if (value < min) {
+                    value = min;
+                } else if (value > max) {
+                    value = max;
+                }
+                event.target.value = value;
+                slider.value = value;
+            });
+
+            sendBtn.addEventListener('click', () => {
+                const value = parseInt(slider.value, 10);
+                console.log('Sending Irradiation Time value:', value);
+                sendIrradiationTime(value);
+            });
+        }
+    }
+
+    const updateElement = (id, value, unit = '', digits = 2) => {
+        const element = document.getElementById(id);
+        if (element) {
+            if (typeof value === 'number') {
+                element.textContent = value.toFixed(digits) + unit;
+            } else {
+                element.textContent = value + unit;
+            }
+        }
+    };
+
+    window.addEventListener('lineCartridgeData', (event) => {
+        // console.log("Line Cartridge Data:", event.detail);
+        const {
+            Country,
+            Mhz,
+            Depth,
+            Power,
+            ProductSerial,
+            TotalShot,
+            RemShot,
+            Version
+        } = event.detail;
+
+        let countryStr = 'Unknown';
+        if (Country === 0) countryStr = 'None';
+        else if (Country === 1) countryStr = 'Korea';
+        else if (Country === 2) countryStr = 'Brazil';
+        updateElement('lc-country', countryStr);
+
+        updateElement('lc-mhz', (Mhz ? (Mhz / 1000).toFixed(3) : 0), ' MHz');
+
+        // Map Depth to String
+        let depthStr = 'None';
+        if (Depth === 1) depthStr = '1.5mm';
+        else if (Depth === 2) depthStr = '3.0mm';
+        else if (Depth === 3) depthStr = '4.5mm';
+        else if (Depth === 4) depthStr = '7.0mm';
+        else if (Depth === 5) depthStr = '10.0mm';
+        else if (Depth === 6) depthStr = '13.0mm';
+        updateElement('lc-depth', depthStr);
+
+        updateElement('lc-power', Power);
+
+        updateElement('lc-serial', ProductSerial);
+        updateElement('lc-total-shot', TotalShot, '', 0);
+        updateElement('lc-rem-shot', RemShot, '', 0);
+
+        // Update Version in Serial Control
+        updateElement('lc_ver', Version || '-');
+
+        // Sync Input Fields
+        const lcCountryInput = document.getElementById('lc-country-input');
+        if (lcCountryInput) lcCountryInput.value = Country;
+
+        const lcMhzInput = document.getElementById('lc-mhz-input');
+        if (lcMhzInput) lcMhzInput.value = (Mhz ? (Mhz / 1000).toFixed(3) : 0);
+
+        const lcDepthInput = document.getElementById('lc-depth-input');
+        if (lcDepthInput) lcDepthInput.value = Depth;
+
+        const lcPowerInput = document.getElementById('lc-power-input');
+        if (lcPowerInput) lcPowerInput.value = Power;
+
+        const lcSerialInput = document.getElementById('lc-serial-input');
+        if (lcSerialInput) lcSerialInput.value = ProductSerial;
+
+        const lcTotalShotInput = document.getElementById('lc-total-shot-input');
+        if (lcTotalShotInput) lcTotalShotInput.value = TotalShot;
+
+        const lcRemShotInput = document.getElementById('lc-rem-shot-input');
+        if (lcRemShotInput) lcRemShotInput.value = RemShot;
+    });
+
+    // Pen Cartridge Listener
+
+    window.addEventListener('penCartridgeData', (event) => {
+        // console.log("Pen Cartridge Data:", event.detail);
+        const { Country, Mhz, Depth, ProductSerial, TotalShot, RemShot, Version, Power } = event.detail;
+
+        let countryStr = 'Unknown';
+        if (Country === 0) countryStr = 'None';
+        else if (Country === 1) countryStr = 'Korea';
+        else if (Country === 2) countryStr = 'Brazil';
+        updateElement('pc-country', countryStr);
+        updateElement('pc-mhz', (Mhz ? (Mhz / 1000).toFixed(3) : 0), ' MHz');
+
+        let depthStr = 'None';
+        if (Depth === 1) depthStr = '1.5mm';
+        else if (Depth === 2) depthStr = '3.0mm';
+        else if (Depth === 3) depthStr = '4.5mm';
+        else if (Depth === 4) depthStr = '7.0mm';
+        else if (Depth === 5) depthStr = '10.0mm';
+        else if (Depth === 6) depthStr = '13.0mm';
+        updateElement('pc-depth', depthStr);
+
+        updateElement('pc-power', Power);
+
+        updateElement('pc-serial', ProductSerial);
+        updateElement('pc-total-shot', TotalShot, '', 0);
+        updateElement('pc-rem-shot', RemShot, '', 0);
+
+        // Update Version in Serial Control
+        updateElement('pc_ver', Version || '-');
+
+        // Sync Input Fields
+        const pcCountryInput = document.getElementById('pc-country-input');
+        if (pcCountryInput) pcCountryInput.value = Country;
+
+        const pcMhzInput = document.getElementById('pc-mhz-input');
+        if (pcMhzInput) pcMhzInput.value = (Mhz ? (Mhz / 1000).toFixed(3) : 0);
+
+        const pcDepthInput = document.getElementById('pc-depth-input');
+        if (pcDepthInput) pcDepthInput.value = Depth;
+
+        const pcPowerInput = document.getElementById('pc-power-input');
+        if (pcPowerInput) pcPowerInput.value = Power;
+
+        const pcSerialInput = document.getElementById('pc-serial-input');
+        if (pcSerialInput) pcSerialInput.value = ProductSerial;
+
+        const pcTotalShotInput = document.getElementById('pc-total-shot-input');
+        if (pcTotalShotInput) pcTotalShotInput.value = TotalShot;
+
+        const pcRemShotInput = document.getElementById('pc-rem-shot-input');
+        if (pcRemShotInput) pcRemShotInput.value = RemShot;
+    });
+
+    // RF TIP Listener
+
+    window.addEventListener('rfTipData', (event) => {
+        // console.log("RF TIP Data:", event.detail);
+        const { Country, Mhz, Depth, ProductSerial, TotalShot, RemShot, Version, Power } = event.detail;
+
+        let countryStr = 'Unknown';
+        if (Country === 0) countryStr = 'None';
+        else if (Country === 1) countryStr = 'Korea';
+        else if (Country === 2) countryStr = 'Brazil';
+        updateElement('rt-country', countryStr);
+        updateElement('rt-mhz', (Mhz ? (Mhz / 1000).toFixed(3) : 0), ' MHz');
+
+        updateElement('rt-power', Power);
+
+        updateElement('rt-serial', ProductSerial);
+        updateElement('rt-total-shot', TotalShot, '', 0);
+        updateElement('rt-rem-shot', RemShot, '', 0);
+
+        // Update Version in Serial Control
+        updateElement('rt_ver', Version || '-');
+
+        // Sync Input Fields
+        const rtCountryInput = document.getElementById('rt-country-input');
+        if (rtCountryInput) rtCountryInput.value = Country;
+
+        const rtDepthInput = document.getElementById('rt-depth-input');
+        if (rtDepthInput) rtDepthInput.value = Depth;
+
+        const rtPowerInput = document.getElementById('rt-power-input');
+        if (rtPowerInput) rtPowerInput.value = Power;
+
+        const rtMhzInput = document.getElementById('rt-mhz-input');
+        if (rtMhzInput) rtMhzInput.value = (Mhz ? (Mhz / 1000).toFixed(3) : 0);
+
+        const rtSerialInput = document.getElementById('rt-serial-input');
+        if (rtSerialInput) rtSerialInput.value = ProductSerial;
+
+        const rtTotalShotInput = document.getElementById('rt-total-shot-input');
+        if (rtTotalShotInput) rtTotalShotInput.value = TotalShot;
+
+        const rtRemShotInput = document.getElementById('rt-rem-shot-input');
+        if (rtRemShotInput) rtRemShotInput.value = RemShot;
+    });
+
+
+    window.addEventListener('rfData', (event) => {
+        console.log("rf Data:", event.detail);
+        const {
+            Curr,
+            Volt,
+            Watt1,
+            Watt2,
+            PWM_MHz,
+            Duty,
+            FWVersionMajor,
+            FWVersionMinor,
+            FWVersionPatch,
+            InputStatus,
+        } = event.detail;
+
+        updateElement('rf-OUTPUT_CURRENT', Curr / 100, ' A');
+        updateElement('rf-INPUT_CURRENT', Watt1 / 100, ' A');
+        updateElement('rf-INPUT_VOLT', Volt / 100, ' V');
+        updateElement('rf-OUTPUT_VOLT', Watt2 / 100, ' V');
+        updateElement('rf-VI_PHASE', InputStatus[0] / 100, ' V');
+        updateElement('rf-RF_2S_VOLTAGE', InputStatus[1] / 100, ' V');
+        updateElement('rf-VOLT_V12_', InputStatus[2] * 12 / 100, ' V');
+        updateElement('rf-VOLT_V12', InputStatus[3] * 6 / 100, ' V');
+        updateElement('rf-VOLT_V5', InputStatus[4] / 0.4 / 100, ' V');
+        updateElement('rf-VOLT_V5_', InputStatus[5] / 0.2 / 100, ' V');
+        updateElement('rf-CURR_VRF', InputStatus[6], ' mA', 0);
+        updateElement('rf-NTC_RF', InputStatus[7] / 10, ' °C', 1);
+        updateElement('rf-display-hz', PWM_MHz / 100, ' MHz', 2);
+        updateElement('rf-display-pwm', Duty / 10, ' %', 0);
+
+        // const rfVersion = `v${FWVersionMajor}.${FWVersionMinor}.${FWVersionPatch}`;
+        // updateElement('rf_ver', rfVersion);
+    });
+
+    window.addEventListener('mainVersionData', (event) => {
+        const { version } = event.detail;
+        console.log("Updating Main Ver:", version);
+        updateElement('rf_ver', version);
     });
 
 </script>

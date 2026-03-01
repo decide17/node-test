@@ -68,6 +68,11 @@
     minimatch "^3.0.4"
     plist "^3.0.4"
 
+"@fontsource/noto-sans-kr@^5.2.9":
+  version "5.2.9"
+  resolved "https://registry.npmjs.org/@fontsource/noto-sans-kr/-/noto-sans-kr-5.2.9.tgz"
+  integrity sha512-pbF8F0rUzKkDmnk/KYGAbxjgW4TrIHdFKnV6OQ+kUC9ELCn5utrAURcEgMqq3J9SRX+FvjOz+aBCmfcC8/r7cw==
+
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
   resolved "https://registry.npmjs.org/@isaacs/cliui/-/cliui-8.0.2.tgz"
@@ -106,11 +111,6 @@
   version "0.11.0"
   resolved "https://registry.npmjs.org/@pkgjs/parseargs/-/parseargs-0.11.0.tgz"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
-
-"@popperjs/core@^2.11.8":
-  version "2.11.8"
-  resolved "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz"
-  integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@serialport/binding-mock@10.2.2":
   version "10.2.2"
@@ -254,10 +254,17 @@
   resolved "https://registry.npmjs.org/@types/ms/-/ms-2.1.0.tgz"
   integrity sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==
 
-"@types/node@*", "@types/node@^22.7.7":
+"@types/node@*":
   version "22.16.2"
   resolved "https://registry.npmjs.org/@types/node/-/node-22.16.2.tgz"
   integrity sha512-Cdqa/eJTvt4fC4wmq1Mcc0CPUjp/Qy2FGqLza3z3pKymsI969TcZ54diNJv8UYUgeWxyb8FSbCkhdR6WqmUFhA==
+  dependencies:
+    undici-types "~6.21.0"
+
+"@types/node@^20.9.0":
+  version "20.19.17"
+  resolved "https://registry.npmjs.org/@types/node/-/node-20.19.17.tgz"
+  integrity sha512-gfehUI8N1z92kygssiuWvLiwcbOB3IRktR6hTDgJlXMYh5OvkPSRmgfoBUmfZt+vhwJtX7v1Yw4KvvAf7c5QKQ==
   dependencies:
     undici-types "~6.21.0"
 
@@ -472,11 +479,6 @@ boolean@^3.0.1:
   version "3.2.0"
   resolved "https://registry.npmjs.org/boolean/-/boolean-3.2.0.tgz"
   integrity sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==
-
-bootstrap@^5.3.2:
-  version "5.3.2"
-  resolved "https://registry.npmjs.org/bootstrap/-/bootstrap-5.3.2.tgz"
-  integrity sha512-D32nmNWiQHo94BKHLmOrdjlL05q1c8oxbtBphQFb9Z5to6eGRDCm0QgeaZ4zFBHzfg2++rqa2JkqCcxDy0sH0g==
 
 brace-expansion@^1.1.7:
   version "1.1.12"
@@ -837,13 +839,13 @@ electron-publish@24.13.1:
     lazy-val "^1.0.5"
     mime "^2.5.2"
 
-electron@^37.2.0:
-  version "37.2.0"
-  resolved "https://registry.npmjs.org/electron/-/electron-37.2.0.tgz"
-  integrity sha512-dE6+qeg6SBUVd5d8CD2+GH82kh+gF1v40+hs+U+UOno681NMSGmBtgqwldQRpbvtnQDD7V2M9Cpfr3+Abw7aBg==
+electron@^29.1.0:
+  version "29.4.6"
+  resolved "https://registry.npmjs.org/electron/-/electron-29.4.6.tgz"
+  integrity sha512-fz8ndj8cmmf441t4Yh2FDP3Rn0JhLkVGvtUf2YVMbJ5SdJPlc0JWll9jYkhh60jDKVVCr/tBAmfxqRnXMWJpzg==
   dependencies:
     "@electron/get" "^2.0.0"
-    "@types/node" "^22.7.7"
+    "@types/node" "^20.9.0"
     extract-zip "^2.0.1"
 
 emoji-regex@^8.0.0:
@@ -1926,6 +1928,11 @@ supports-color@^7.1.0:
   integrity sha512-qpCAvRl9stuOHveKsn7HncJRvv501qIacKzQlO/+Lwxc9+0q2wLyv4Dfvt80/DPn2pqOBsJdDiogXGR9+OvwRw==
   dependencies:
     has-flag "^4.0.0"
+
+tailwindcss@^4.1.13:
+  version "4.1.13"
+  resolved "https://registry.npmjs.org/tailwindcss/-/tailwindcss-4.1.13.tgz"
+  integrity sha512-i+zidfmTqtwquj4hMEwdjshYYgMbOrPzb9a0M3ZgNa0JMoZeFC6bxZvO8yr8ozS6ix2SDz0+mvryPeBs2TFE+w==
 
 tar-stream@^2.2.0:
   version "2.2.0"

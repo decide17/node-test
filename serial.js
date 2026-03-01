@@ -429,8 +429,14 @@ function rx_handler (data) {
         switch(value_tx) {
             case 0:
                 if ( velog.control ) {
-                    document.getElementById("sw_ver").value = "sw : "  + velog.control.sw_version;
-                    document.getElementById("hw_ver").value = "hw : "  + velog.control.hw_version;
+                    const chopperVer = document.getElementById("chopper_ver");
+                    if (chopperVer) {
+                        chopperVer.textContent = "v" + velog.control.sw_version;
+                    }
+                    const rfVer = document.getElementById("rf_ver");
+                    if (rfVer) {
+                        rfVer.textContent = "v" + velog.control.hw_version;
+                    }
                     for (var i = 0; i < velog.slot.length; i++) {
                             document.querySelector( '#slot_'+i+' [name=slot_id]' ).innerHTML = velog.slot[i].id;
                             document.querySelector( '#slot_'+i+' [name=slot_sw_ver]' ).innerHTML = velog.slot[i].sw_version;
@@ -684,7 +690,7 @@ async function ymodem_func(firmware) {
     await send_start(selectSerialPort);
 }
 
-listSerialPorts();
+// listSerialPorts();
 
 
 

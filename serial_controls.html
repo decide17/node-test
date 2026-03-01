@@ -1,0 +1,70 @@
+<div class="container mx-auto my-3 px-4">
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+        <div class="p-4 border-b bg-gray-800 text-white">
+            <h5 class="text-lg font-bold">Serial Control</h5>
+        </div>
+        <div class="p-4">
+            <!-- Row 1: Connection Controls -->
+            <div class="flex flex-row flex-wrap justify-center items-center gap-4 mb-4 border-b pb-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-bold">SERIAL</span>
+                    <select class="border border-gray-300 rounded-md text-xs h-8 w-32 align-middle" id="serial_ports"
+                        onchange="onChangeSelectOption()">
+                    </select>
+                </div>
+                <div>
+                    <button type="button"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-sm"
+                        id="scan-ports-btn">Scan</button>
+                </div>
+                <div>
+                    <button type="button"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-sm"
+                        id="setport" onClick="send_start(document.getElementById('serial_ports').value)">OPEN</button>
+                </div>
+                <div>
+                    <button type="button"
+                        class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded text-sm" id="setport"
+                        onClick="send_stop()">STOP</button>
+                </div>
+            </div>
+
+            <!-- Row 2: Version Info -->
+            <div class="flex flex-row flex-wrap justify-center items-center gap-4">
+                <!-- Main Version -->
+                <div class="px-2 mt-2 md:mt-0">
+                    <div class="flex justify-between items-center border p-2 rounded bg-gray-50 shadow-sm">
+                        <span class="text-sm font-bold mr-2 text-gray-700">Main</span>
+                        <span
+                            class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-green-500 text-white"
+                            id="rf_ver">-</span>
+                    </div>
+                </div>
+                <div class="px-2 mt-2 md:mt-0">
+                    <div class="flex justify-between items-center border p-2 rounded bg-gray-50 shadow-sm">
+                        <span class="text-sm font-bold mr-2 text-gray-700">Line</span>
+                        <span
+                            class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-green-500 text-white"
+                            id="lc_ver">-</span>
+                    </div>
+                </div>
+                <div class="px-2 mt-2 md:mt-0">
+                    <div class="flex justify-between items-center border p-2 rounded bg-gray-50 shadow-sm">
+                        <span class="text-sm font-bold mr-2 text-gray-700">Pen</span>
+                        <span
+                            class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-green-500 text-white"
+                            id="pc_ver">-</span>
+                    </div>
+                </div>
+                <div class="px-2 mt-2 md:mt-0">
+                    <div class="flex justify-between items-center border p-2 rounded bg-gray-50 shadow-sm">
+                        <span class="text-sm font-bold mr-2 text-gray-700">RF Tip</span>
+                        <span
+                            class="text-xs font-semibold inline-block py-1 px-2 uppercase rounded bg-green-500 text-white"
+                            id="rt_ver">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

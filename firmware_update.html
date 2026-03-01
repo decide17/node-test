@@ -1,0 +1,21 @@
+<div class="container mx-auto my-3 px-4">
+    <div class="bg-white shadow-sm rounded-lg overflow-hidden">
+        <div class="p-4 border-b bg-gray-800 text-white">
+            <h5 class="text-lg font-bold">Firmware Update</h5>
+        </div>
+        <div class="p-4">
+            <div class="flex flex-row flex-wrap justify-around items-center">
+                <div class="mt-2 md:mt-0">
+                    <input class="block w-full text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none" type="file" id="formFile">
+                </div>
+                <div class="mt-2 md:mt-0">
+                    <select class="border border-gray-300 rounded-md text-xs h-8 w-32 align-middle" id="fw_sel" onchange="onChangeSelectFW()">
+                    </select>
+                </div>
+                <div class="mt-2 md:mt-0">
+                    <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm" id="download" onClick="fw_download_func()">펌웨어다운로드</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

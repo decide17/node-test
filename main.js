@@ -15,7 +15,9 @@ function createWindow () {
   win.loadFile('index.html');
 
   // for debugging
-  win.openDevTools();
+  if (!app.isPackaged) {
+    win.openDevTools();
+  }
 
 }
 
