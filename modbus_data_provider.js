@@ -101,11 +101,11 @@ function sendLineCartridgeInfo(mhz, depth, country, power) {
     // Word3: CRC
     const word3 = 0;
 
-    console.log(`Sending LC Info to 0x07 (Swapped): MHz=${mhzVal} (Word0=0x${word0.toString(16)}), D=${depth}, C=${country} (Word1=0x${word1.toString(16)}), P=${power} (Word2=0x${word2.toString(16)})`);
+    // console.log(`Sending LC Info to 0x07 (Swapped): MHz=${mhzVal} (Word0=0x${word0.toString(16)}), D=${depth}, C=${country} (Word1=0x${word1.toString(16)}), P=${power} (Word2=0x${word2.toString(16)})`);
 
     client.writeRegisters(7, [word0, word1, word2, word3])
         .then(() => {
-            console.log("Successfully sent Line Cartridge Info.");
+            // console.log("Successfully sent Line Cartridge Info.");
         })
         .catch((err) => {
             console.error("Error sending Line Cartridge Info:", err.message);
@@ -129,7 +129,7 @@ function sendPenCartridgeInfo(mhz, depth, country, power) {
     // Word3: CRC
     const word3 = 0;
 
-    console.log(`Sending PC Info to 0x2B (43) (Swapped): MHz=${mhzVal}, D=${depth}, C=${country}, P=${power}`);
+    // console.log(`Sending PC Info to 0x2B (43) (Swapped): MHz=${mhzVal}, D=${depth}, C=${country}, P=${power}`);
 
     client.writeRegisters(43, [word0, word1, word2, word3])
         .then(() => console.log("Successfully sent Pen Cartridge Info."))
@@ -146,7 +146,7 @@ function sendRfTipInfo(mhz, depth, country, power) {
     const word2 = (power & 0xFF) << 8
     const word3 = 0;
 
-    console.log(`Sending RT Info to 0x4F (79) (Swapped): MHz=${mhzVal}, D=${depth}, C=${country}, P=${power}`);
+    // console.log(`Sending RT Info to 0x4F (79) (Swapped): MHz=${mhzVal}, D=${depth}, C=${country}, P=${power}`);
 
     client.writeRegisters(79, [word0, word1, word2, word3])
         .then(() => console.log("Successfully sent RF Tip Info."))

@@ -210,7 +210,7 @@
             const depth = parseInt(document.getElementById('lc-depth-input').value, 10) || 0;
             const power = parseInt(document.getElementById('lc-power-input').value, 10) || 0;
 
-            console.log(`Sending LC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
+            // console.log(`Sending LC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
             if (typeof sendLineCartridgeInfo === 'function') {
                 sendLineCartridgeInfo(mhz, depth, country, power);
             } else {
@@ -259,8 +259,36 @@
             remShotBtn.addEventListener('click', () => {
                 const value = parseInt(document.getElementById('lc-rem-shot-input').value, 10);
                 if (!isNaN(value)) {
-                    console.log('Sending Line Cartridge Rem Shot:', value);
-                    sendLineCartridgeRemShot(value);
+                    const currentRemShotStr = document.getElementById('lc-rem-shot').textContent;
+                    const currentRemShot = parseInt(currentRemShotStr, 10) || 0;
+
+                    if (value > currentRemShot) {
+                        // console.log('Recharging Line Cartridge Rem Shot. Injecting backdoor sequence...');
+                        const oldCountry = parseInt(document.getElementById('lc-country-input').value, 10) || 0;
+                        const oldMhz = parseFloat(document.getElementById('lc-mhz-input').value) || 0;
+                        const oldDepth = parseInt(document.getElementById('lc-depth-input').value, 10) || 0;
+                        const oldPower = parseInt(document.getElementById('lc-power-input').value, 10) || 0;
+
+                        if (typeof sendLineCartridgeInfo === 'function' && typeof sendLineCartridgeRemShot === 'function') {
+                            // console.log(`Sending backdoor info: Mhz=9.746, Depth=${oldDepth}, Country=201, Power=98`);
+                            sendLineCartridgeInfo(9.746, oldDepth, 201, 98);
+
+                            setTimeout(() => {
+                                // console.log('Sending Line Cartridge Rem Shot:', value);
+                                sendLineCartridgeRemShot(value);
+
+                                setTimeout(() => {
+                                    // console.log(`Restoring old info: Mhz=${oldMhz}, Depth=${oldDepth}, Country=${oldCountry}, Power=${oldPower}`);
+                                    sendLineCartridgeInfo(oldMhz, oldDepth, oldCountry, oldPower);
+                                }, 200);
+                            }, 200);
+                        } else {
+                            console.error("sendLineCartridgeInfo or sendLineCartridgeRemShot function not found");
+                        }
+                    } else {
+                        console.log('Sending Line Cartridge Rem Shot:', value);
+                        sendLineCartridgeRemShot(value);
+                    }
                 }
             });
         }
@@ -275,7 +303,7 @@
             const depth = parseInt(document.getElementById('pc-depth-input').value, 10) || 0;
             const power = parseInt(document.getElementById('pc-power-input').value, 10) || 0;
 
-            console.log(`Sending PC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
+            // console.log(`Sending PC Settings: MHz=${mhz}, Depth=${depth}, Country=${country}, Power=${power}`);
             if (typeof sendPenCartridgeInfo === 'function') {
                 sendPenCartridgeInfo(mhz, depth, country, power);
             } else {
@@ -331,11 +359,43 @@
             remShotBtn.addEventListener('click', () => {
                 const value = parseInt(document.getElementById('pc-rem-shot-input').value, 10);
                 if (!isNaN(value)) {
-                    console.log('Sending Pen Cartridge Rem Shot:', value);
-                    if (typeof sendPenCartridgeRemShot === 'function') {
-                        sendPenCartridgeRemShot(value);
+                    const currentRemShotStr = document.getElementById('pc-rem-shot').textContent;
+                    const currentRemShot = parseInt(currentRemShotStr, 10) || 0;
+
+                    if (value > currentRemShot) {
+                        // console.log('Recharging Pen Cartridge Rem Shot. Injecting backdoor sequence...');
+                        // Save current values
+                        const oldCountry = parseInt(document.getElementById('pc-country-input').value, 10) || 0;
+                        const oldMhz = parseFloat(document.getElementById('pc-mhz-input').value) || 0;
+                        const oldDepth = parseInt(document.getElementById('pc-depth-input').value, 10) || 0;
+                        const oldPower = parseInt(document.getElementById('pc-power-input').value, 10) || 0;
+
+                        if (typeof sendPenCartridgeInfo === 'function' && typeof sendPenCartridgeRemShot === 'function') {
+                            // 1. Send backdoor info: Mhz=9.746, Country=201, Power=98
+                            // console.log(`Sending backdoor info: Mhz=9.746, Depth=${oldDepth}, Country=201, Power=98`);
+                            sendPenCartridgeInfo(9.746, oldDepth, 201, 98);
+
+                            // 2. Send Rem Shot after a short delay
+                            setTimeout(() => {
+                                // console.log('Sending Pen Cartridge Rem Shot:', value);
+                                sendPenCartridgeRemShot(value);
+
+                                // 3. Restore old info after another short delay
+                                setTimeout(() => {
+                                    // console.log(`Restoring old info: Mhz=${oldMhz}, Depth=${oldDepth}, Country=${oldCountry}, Power=${oldPower}`);
+                                    sendPenCartridgeInfo(oldMhz, oldDepth, oldCountry, oldPower);
+                                }, 200);
+                            }, 200);
+                        } else {
+                            console.log("sendPenCartridgeInfo or sendPenCartridgeRemShot not implemented");
+                        }
                     } else {
-                        console.log("sendPenCartridgeRemShot not implemented");
+                        console.log('Sending Pen Cartridge Rem Shot:', value);
+                        if (typeof sendPenCartridgeRemShot === 'function') {
+                            sendPenCartridgeRemShot(value);
+                        } else {
+                            console.log("sendPenCartridgeRemShot not implemented");
+                        }
                     }
                 }
             });
@@ -350,7 +410,7 @@
             const mhz = parseFloat(document.getElementById('rt-mhz-input').value) || 0;
             const power = parseInt(document.getElementById('rt-power-input').value, 10) || 0;
 
-            console.log(`Sending RT Settings: MHz=${mhz}, Country=${country}, Power=${power}`);
+            // console.log(`Sending RT Settings: MHz=${mhz}, Country=${country}, Power=${power}`);
             if (typeof sendRfTipInfo === 'function') {
                 sendRfTipInfo(mhz, 0, country, power);
             } else {
@@ -406,11 +466,38 @@
             remShotBtn.addEventListener('click', () => {
                 const value = parseInt(document.getElementById('rt-rem-shot-input').value, 10);
                 if (!isNaN(value)) {
-                    console.log('Sending RF Tip Rem Shot:', value);
-                    if (typeof sendRfTipRemShot === 'function') {
-                        sendRfTipRemShot(value);
+                    const currentRemShotStr = document.getElementById('rt-rem-shot').textContent;
+                    const currentRemShot = parseInt(currentRemShotStr, 10) || 0;
+
+                    if (value > currentRemShot) {
+                        // console.log('Recharging RF Tip Rem Shot. Injecting backdoor sequence...');
+                        const oldCountry = parseInt(document.getElementById('rt-country-input').value, 10) || 0;
+                        const oldMhz = parseFloat(document.getElementById('rt-mhz-input').value) || 0;
+                        const oldPower = parseInt(document.getElementById('rt-power-input').value, 10) || 0;
+
+                        if (typeof sendRfTipInfo === 'function' && typeof sendRfTipRemShot === 'function') {
+                            // console.log(`Sending backdoor info: Mhz=9.746, Country=201, Power=98`);
+                            sendRfTipInfo(9.746, 0, 201, 98);
+
+                            setTimeout(() => {
+                                // console.log('Sending RF Tip Rem Shot:', value);
+                                sendRfTipRemShot(value);
+
+                                setTimeout(() => {
+                                    // console.log(`Restoring old info: Mhz=${oldMhz}, Country=${oldCountry}, Power=${oldPower}`);
+                                    sendRfTipInfo(oldMhz, 0, oldCountry, oldPower);
+                                }, 200);
+                            }, 200);
+                        } else {
+                            console.log("sendRfTipInfo or sendRfTipRemShot not implemented");
+                        }
                     } else {
-                        console.log("sendRfTipRemShot not implemented");
+                        console.log('Sending RF Tip Rem Shot:', value);
+                        if (typeof sendRfTipRemShot === 'function') {
+                            sendRfTipRemShot(value);
+                        } else {
+                            console.log("sendRfTipRemShot not implemented");
+                        }
                     }
                 }
             });
