@@ -2,14 +2,14 @@ const { app, BrowserWindow } = require('electron');
 
 // 리눅스(라즈베리파이 등)에서만 터치 이벤트를 강제 활성화 (안전하게 설정)
 if (process.platform === 'linux') {
-    app.commandLine.appendSwitch('touch-events', 'enabled');
+  app.commandLine.appendSwitch('touch-events', 'enabled');
 }
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 1200,
-    height: 900,
-    fullscreen: false,
+    width: 780,
+    height: 600,
+    fullscreen: process.platform === 'linux',
     autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true, // to allow require
