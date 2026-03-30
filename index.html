@@ -16,6 +16,9 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
+            user-select: none; /* Prevent text highlighting during touch drag */
+            -webkit-user-select: none;
+            cursor: grab;
         }
 
         .control-panel-bg {
@@ -81,7 +84,44 @@
 
 <script src="./serial.js"></script>
 <script src="./modbus_data_provider.js"></script>
-<!-- <script src="./oscilloscope_simulator.js"></script> -->
+
+<!-- Drag to Scroll feature for Linux Kiosk Mode -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let isDown = false;
+    let startY;
+    let scrollTop;
+
+    window.addEventListener('mousedown', (e) => {
+        // Prevent interfering with input elements and buttons
+        if (['INPUT', 'TEXTAREA', 'SELECT', 'BUTTON', 'OPTION'].includes(e.target.tagName)) return;
+        
+        isDown = true;
+        startY = e.pageY;
+        scrollTop = document.documentElement.scrollTop;
+        document.body.style.cursor = 'grabbing';
+    });
+
+    window.addEventListener('mouseleave', () => {
+        isDown = false;
+        document.body.style.cursor = 'grab';
+    });
+
+    window.addEventListener('mouseup', () => {
+        isDown = false;
+        document.body.style.cursor = 'grab';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const y = e.pageY;
+        const walk = (y - startY) * 1.25; // Scroll speed factor
+        document.documentElement.scrollTop = scrollTop - walk;
+    });
+});
+</script>
+
 <!-- <script src="./oscilloscope_simulator.js"></script> -->
 <script>
 
