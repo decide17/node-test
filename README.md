@@ -75,6 +75,9 @@ yarn deploy:win32
 yarn deploy:osx
 # linux
 yarn deploy:linux
+# raspberry pi 5
+yarn deploy:linux-arm64
+
 ```
 created **dist** folder where excutable app file
 ```

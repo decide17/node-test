@@ -12,7 +12,8 @@
     "deploy:win32": "electron-builder --win nsis:ia32",
     "deploy:win64": "electron-builder --win nsis:x64",
     "deploy:linux32": "electron-builder --linux --ia32",
-    "deploy:linux64": "electron-builder --linux --x64"
+    "deploy:linux64": "electron-builder --linux --x64",
+    "deploy:linux-arm64": "electron-builder --linux --arm64"
   },
   "build": {
     "productName": "",
