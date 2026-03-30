@@ -1,11 +1,9 @@
 const { app, BrowserWindow } = require('electron');
 
-// 리눅스 키오스크 환경 등에서 터치 이벤트를 강제로 활성화합니다.
-app.commandLine.appendSwitch('touch-events', 'enabled');
-
-// 라즈베리파이 5 (Wayland 기반 Bookworm OS) 터치 및 드래그 최적화
-app.commandLine.appendSwitch('enable-features', 'UseOzonePlatform');
-app.commandLine.appendSwitch('ozone-platform', 'wayland');
+// 리눅스(라즈베리파이 등)에서만 터치 이벤트를 강제 활성화 (안전하게 설정)
+if (process.platform === 'linux') {
+    app.commandLine.appendSwitch('touch-events', 'enabled');
+}
 
 function createWindow() {
   const win = new BrowserWindow({
